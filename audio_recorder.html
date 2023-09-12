@@ -4,11 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Recorder</title>
-</head>
-<body>
-    <button id="startRecord">Start Recording</button>
-    <button id="stopRecord">Stop Recording</button>
-
     <script>
         // Your JavaScript code here...
         let mediaRecorder;
@@ -23,7 +18,13 @@
             console.log("stopRecording called");
             // ...
         }
+    </script>
+</head>
+<body>
+    <button id="startRecord">Start Recording</button>
+    <button id="stopRecord">Stop Recording</button>
 
+    <script>
         document.getElementById('startRecord').addEventListener('click', startRecording);
         document.getElementById('stopRecord').addEventListener('click', stopRecording);
     </script>
