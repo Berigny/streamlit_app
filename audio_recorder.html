@@ -2,7 +2,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Recorder</title>
-    <script type="text/javascript">
+    <script>
         console.log("Script loaded");
 
         let mediaRecorder;
@@ -30,12 +30,16 @@
                 const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                 const audioUrl = URL.createObjectURL(audioBlob);
                 const audio = new Audio(audioUrl);
+                document.body.appendChild(audio);
                 audio.play();
+
+                // Log the audioChunks and audioBlob to console
+                console.log(audioChunks);
+                console.log(audioBlob);
             } catch (err) {
                 console.error("Error in stopRecording:", err);
             }
         }
-
 
         window.onload = () => {
             console.log("Page has loaded, setting up event listeners");
