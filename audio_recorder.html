@@ -3,8 +3,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Recorder</title>
     <script>
-        let mediaRecorder;
-        let audioChunks = [];
+            console.log("Script loaded");
+
+    let mediaRecorder;
+    let audioChunks = [];
+
 
         async function startRecording() {
             console.log("startRecording called");
@@ -34,11 +37,11 @@
             }
         }
 
-        window.onload = () => {
-            console.log("Page has loaded, setting up event listeners");
-            document.getElementById('startRecord').addEventListener('click', startRecording);
-            document.getElementById('stopRecord').addEventListener('click', stopRecording);
-        };
+window.onload = () => {
+    console.log("Page has loaded, setting up event listeners");
+    document.getElementById('startRecord').addEventListener('click', startRecording);
+    document.getElementById('stopRecord').addEventListener('click', stopRecording);
+};
     </script>
 </head>
 <body>
