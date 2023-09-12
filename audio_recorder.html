@@ -29,7 +29,7 @@
             console.log("stopRecording called");
             try {
                 mediaRecorder.stop();
-                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                 
                 const reader = new FileReader();
                 reader.onloadend = () => {
@@ -37,12 +37,15 @@
                     const audioElement = document.createElement('audio');
                     audioElement.controls = true;
                     audioElement.src = base64data;
-
+        
                     document.body.appendChild(audioElement);
-                    audioElement.play();
+                    audioElement.onloadeddata = () => {
+                        console.log("Audio data loaded");
+                        audioElement.play();
+                    };
                 };
                 reader.readAsDataURL(audioBlob);
-
+        
                 // Log the audioChunks and audioBlob to console
                 console.log(audioChunks);
                 console.log(audioBlob);
