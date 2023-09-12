@@ -27,7 +27,7 @@
             console.log("stopRecording called");
             try {
                 mediaRecorder.stop();
-                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                 const audioUrl = URL.createObjectURL(audioBlob);
                 const audio = new Audio(audioUrl);
                 audio.play();
@@ -35,6 +35,7 @@
                 console.error("Error in stopRecording:", err);
             }
         }
+
 
         window.onload = () => {
             console.log("Page has loaded, setting up event listeners");
