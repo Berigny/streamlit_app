@@ -1,55 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Recorder</title>
-    <script>
-        let mediaRecorder;
-        let audioChunks = [];
-        let audioBlob;
+<script>
+    let mediaRecorder;
+    let audioChunks = [];
 
-        async function startRecording() {
-            console.log("startRecording called");
-            audioChunks = [];
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.ondataavailable = event => {
-                    audioChunks.push(event.data);
-                };
-                mediaRecorder.start();
-            } catch (err) {
-                console.error("Error in startRecording:", err);
-            }
+    async function startRecording() {
+        console.log("startRecording called");
+        audioChunks = [];
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+            mediaRecorder.start();
+        } catch (err) {
+            console.error("Error in startRecording:", err);
         }
+    }
 
-        async function stopRecording() {
-            console.log("stopRecording called");
-            try {
-                mediaRecorder.stop();
-                mediaRecorder.onstop = () => {
-                    audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    const audio = new Audio(audioUrl);
-                    audio.onloadedmetadata = () => {
-                        audio.play();
-                    }
-                };
-            } catch (err) {
-                console.error("Error in stopRecording:", err);
-            }
+    async function stopRecording() {
+        console.log("stopRecording called");
+        try {
+            mediaRecorder.stop();
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const reader = new FileReader();
+            reader.readAsDataURL(audioBlob); 
+            reader.onloadend = () => {
+                let base64String = reader.result;
+                base64String = base64String.split(',')[1];
+                streamlitPython.sendBack({ type: "audio_data", value: base64String });
+            };
+        } catch (err) {
+            console.error("Error in stopRecording:", err);
         }
+    }
 
-        window.onload = () => {
-            console.log("Page has loaded, setting up event listeners");
-            document.getElementById('startRecord').addEventListener('click', startRecording);
-            document.getElementById('stopRecord').addEventListener('click', stopRecording);
-        };
-    </script>
-</head>
-<body>
-    <button id="startRecord">Start Recording</button>
-    <button id="stopRecord">Stop Recording</button>
-</body>
-</html>
+    window.onload = () => {
+        console.log("Page has loaded, setting up event listeners");
+        document.getElementById('startRecord').addEventListener('click', startRecording);
+        document.getElementById('stopRecord').addEventListener('click', stopRecording);
+    };
+</script>
