@@ -1,8 +1,9 @@
+import os
 import openai
 import streamlit as st
 
-# Set your OpenAI API key here
 openai.api_key = os.environ.get("OPENAI_API_KEY")
+
 
 # Streamlit app title
 st.title("Meeting Minutes Generator")
