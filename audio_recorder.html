@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Recorder</title>
     <script>
-        console.log("Script loaded");
-
         let mediaRecorder;
         let audioChunks = [];
-
-        let startBtn = document.getElementById('startRecord');
-        let stopBtn = document.getElementById('stopRecord');
+        let audioBlob;
 
         async function startRecording() {
             console.log("startRecording called");
@@ -24,7 +19,6 @@
                     audioChunks.push(event.data);
                 };
                 mediaRecorder.start();
-                stopBtn.addEventListener('click', stopRecording);
             } catch (err) {
                 console.error("Error in startRecording:", err);
             }
@@ -34,23 +28,14 @@
             console.log("stopRecording called");
             try {
                 mediaRecorder.stop();
-                stopBtn.removeEventListener('click', stopRecording); // remove event listener here
-
-                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    const base64data = reader.result;
-                    const audioElement = document.createElement('audio');
-                    audioElement.controls = true;
-                    audioElement.src = base64data;
-
-                    document.body.appendChild(audioElement);
-                    audioElement.onloadeddata = () => {
-                        console.log("Audio data loaded");
-                    };
+                mediaRecorder.onstop = () => {
+                    audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const audio = new Audio(audioUrl);
+                    audio.onloadedmetadata = () => {
+                        audio.play();
+                    }
                 };
-                reader.readAsDataURL(audioBlob);
-
             } catch (err) {
                 console.error("Error in stopRecording:", err);
             }
@@ -58,16 +43,13 @@
 
         window.onload = () => {
             console.log("Page has loaded, setting up event listeners");
-            startBtn = document.getElementById('startRecord');
-            stopBtn = document.getElementById('stopRecord');
-            startBtn.addEventListener('click', startRecording);
+            document.getElementById('startRecord').addEventListener('click', startRecording);
+            document.getElementById('stopRecord').addEventListener('click', stopRecording);
         };
     </script>
 </head>
-
 <body>
     <button id="startRecord">Start Recording</button>
     <button id="stopRecord">Stop Recording</button>
 </body>
-
 </html>
