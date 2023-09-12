@@ -3,32 +3,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Recorder</title>
     <script>
-        // Your JavaScript code here...
         let mediaRecorder;
         let audioChunks = [];
 
         async function startRecording() {
             console.log("startRecording called");
-            // ...
+            audioChunks = [];
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+                mediaRecorder.start();
+            } catch (err) {
+                console.error("Error in startRecording:", err);
+            }
         }
 
         async function stopRecording() {
             console.log("stopRecording called");
-            // ...
+            try {
+                mediaRecorder.stop();
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                audio.play();
+            } catch (err) {
+                console.error("Error in stopRecording:", err);
+            }
         }
 
-window.onload = () => {
-    console.log("Page has loaded, setting up event listeners");
-    document.getElementById('startRecord').addEventListener('click', () => {
-        console.log("Start Recording button clicked");
-        startRecording();
-    });
-    document.getElementById('stopRecord').addEventListener('click', () => {
-        console.log("Stop Recording button clicked");
-        stopRecording();
-    });
-};
-
+        window.onload = () => {
+            console.log("Page has loaded, setting up event listeners");
+            document.getElementById('startRecord').addEventListener('click', startRecording);
+            document.getElementById('stopRecord').addEventListener('click', stopRecording);
+        };
     </script>
 </head>
 <body>
