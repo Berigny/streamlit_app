@@ -29,9 +29,13 @@
                 mediaRecorder.stop();
                 const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                 const audioUrl = URL.createObjectURL(audioBlob);
-                const audio = new Audio(audioUrl);
-                document.body.appendChild(audio);
-                audio.play();
+                
+                const audioElement = document.createElement('audio');
+                audioElement.controls = true;
+                audioElement.src = audioUrl;
+
+                document.body.appendChild(audioElement);
+                audioElement.play();
 
                 // Log the audioChunks and audioBlob to console
                 console.log(audioChunks);
