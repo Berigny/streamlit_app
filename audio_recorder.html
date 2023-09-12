@@ -17,10 +17,18 @@
             // ...
         }
 
-        window.onload = () => {
-            document.getElementById('startRecord').addEventListener('click', startRecording);
-            document.getElementById('stopRecord').addEventListener('click', stopRecording);
-        };
+window.onload = () => {
+    console.log("Page has loaded, setting up event listeners");
+    document.getElementById('startRecord').addEventListener('click', () => {
+        console.log("Start Recording button clicked");
+        startRecording();
+    });
+    document.getElementById('stopRecord').addEventListener('click', () => {
+        console.log("Stop Recording button clicked");
+        stopRecording();
+    });
+};
+
     </script>
 </head>
 <body>
