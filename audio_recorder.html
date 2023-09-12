@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,14 +30,18 @@
             try {
                 mediaRecorder.stop();
                 const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                const audioUrl = URL.createObjectURL(audioBlob);
                 
-                const audioElement = document.createElement('audio');
-                audioElement.controls = true;
-                audioElement.src = audioUrl;
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const base64data = reader.result;
+                    const audioElement = document.createElement('audio');
+                    audioElement.controls = true;
+                    audioElement.src = base64data;
 
-                document.body.appendChild(audioElement);
-                audioElement.play();
+                    document.body.appendChild(audioElement);
+                    audioElement.play();
+                };
+                reader.readAsDataURL(audioBlob);
 
                 // Log the audioChunks and audioBlob to console
                 console.log(audioChunks);
@@ -56,3 +62,4 @@
     <button id="startRecord">Start Recording</button>
     <button id="stopRecord">Stop Recording</button>
 </body>
+</html>
