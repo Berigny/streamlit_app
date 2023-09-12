@@ -2,7 +2,7 @@ import openai
 import streamlit as st
 
 # Set your OpenAI API key here
-openai.api_key = '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'
+openai.api_key = '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'
 
 # Streamlit app title
 st.title("Meeting Minutes Generator")
