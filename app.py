@@ -5,40 +5,17 @@ import streamlit as st
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 
-# Streamlit app title
-st.title("Meeting Minutes Generator")
+import streamlit as st
 
-# Input for meeting notes
-meeting_notes = st.text_area("Enter Meeting Notes", "")
+# Load the HTML file
+with open('audio_recorder.html', 'r') as file:
+    html = file.read()
 
-# Number of minutes to generate
-num_minutes = st.number_input("Number of Minutes to Generate", min_value=1, max_value=10, value=1)
+# Embed the HTML in the Streamlit app
+st.markdown(html, unsafe_allow_html=True)
 
-if st.button("Generate Minutes"):
-    if meeting_notes:
-        # Function to generate meeting minutes
-        def generate_meeting_minutes(meeting_notes, num_minutes):
-            minutes = []
-            for _ in range(num_minutes):
-                prompt = f"Generate meeting minutes from the following notes:\n{meeting_notes}\nMinutes:"
-                
-                response = openai.Completion.create(
-                    engine="davinci",
-                    prompt=prompt,
-                    max_tokens=150,  # Adjust the length of the response as needed
-                    n=1,  # Generate a single response
-                    stop=None,  # You can specify stop conditions if needed
-                    temperature=0.7,  # Adjust temperature for creativity
-                )
-                
-                generated_minutes = response.choices[0].text.strip()
-                minutes.append(generated_minutes)
-            return minutes
+# Check if audio data has been received
+if "audio_data" in st.session_state:
+    # Your processing code here (e.g., send the audio data to OpenAI's API)
+    st.audio(st.session_state.audio_data, format='audio/wav')
 
-        # Generate and display meeting minutes
-        generated_minutes = generate_meeting_minutes(meeting_notes, num_minutes)
-        st.subheader("Generated Meeting Minutes:")
-        for i, minute in enumerate(generated_minutes, start=1):
-            st.write(f"Minute {i}:\n{minute}")
-    else:
-        st.warning("Please enter meeting notes.")
