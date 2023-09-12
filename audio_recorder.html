@@ -34,9 +34,10 @@
         }
     }
 
-    window.onload = () => {
-        console.log("Page has loaded, setting up event listeners");
+    document.addEventListener('DOMContentLoaded', (event) => {
+        console.log("DOM fully loaded and parsed");
         document.getElementById('startRecord').addEventListener('click', startRecording);
         document.getElementById('stopRecord').addEventListener('click', stopRecording);
-    };
+    });
+
 </script>
