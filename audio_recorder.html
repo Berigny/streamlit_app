@@ -35,7 +35,15 @@
 </script>
 </head>
 <body>
-<button id="startRecord" onClick="startRecording()">Start Recording</button>
-<button id="stopRecord" onClick="stopRecording()">Stop Recording</button>
+<button id="startRecord">Start Recording</button>
+<button id="stopRecord">Stop Recording</button>
+
+<script>
+    // Your existing script here...
+
+    document.getElementById('startRecord').addEventListener('click', startRecording);
+    document.getElementById('stopRecord').addEventListener('click', stopRecording);
+</script>
+
 </body>
 </html>
